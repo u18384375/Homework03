@@ -1,0 +1,21 @@
+﻿@model Homework03.Models.Maintainance
+@{
+    ViewBag.Title = "Maintain";
+}
+<div>
+    <h1>Welcome to LMS(Library Manangement System)</h1>
+</div>
+
+<div class="row">
+    <div class="col">
+        @Html.Partial("_AuthorsList", Model.AuthorsList)
+    </div>
+    <div class="col">
+        @Html.Partial("_TypesList", Model.TypesList)
+    </div>
+    <div class="row">
+        <div class="col">
+            @Html.Partial("_BorrowsList", Model.BorrowsList)
+        </div>
+    </div>
+</div>

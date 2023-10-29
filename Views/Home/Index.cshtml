@@ -1,0 +1,44 @@
+﻿@model Homework03.Models.HomeViewModel
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div>
+    <h1>Welcome to LMS(Library Manangement System)</h1>
+</div>
+
+<!-- Render the Student List Partial View -->
+<div class="row">
+    <div class="col">
+        @Html.Partial("_StudentList", Model.StudentList)
+        <div class="pagination">
+            @if (Model.HasPreviousPage)
+            {
+                <a href="?page=@Model.PageIndex - 1">Previous</a>
+            }
+
+            @for (var i = 1; i <= Model.TotalPages; i++)
+            {
+                <span>
+                    @if (Model.PageIndex == i)
+                    {
+                        <b>@i</b>
+                    }
+                    else
+                    {
+                        <a href="?page=@i">@i</a>
+                    }
+                </span>
+            }
+
+            @if (Model.HasNextPage)
+            {
+                <a href="?page=@Model.PageIndex + 1">Next</a>
+            }
+        </div>
+    </div>
+    <div class="col">
+        <!-- Render the Book List Partial View -->
+        @Html.Partial("_BookList", Model.BookList)
+    </div>
+</div>

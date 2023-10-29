@@ -1,0 +1,14 @@
+﻿@model Homework03.Models.borrow
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+@Html.DropDownList("bookId", ViewBag.bookId as SelectList, "Select a Book", new { @class = "form-control" })
+<div id="filteredTableContainer"></div>
+
+<script>
+    jQuery(document).ready(function ($) {
+        $('#bookId').change(function () {
+            var bookId = $(this).val();
+            $('#filteredTableContainer').load('/Home/Filter?bookId=' + bookId);
+        });
+    });
+</script>

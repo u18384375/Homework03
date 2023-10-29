@@ -1,0 +1,233 @@
+﻿
+@{
+    ViewBag.Title = "_BorrowsList";
+}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<button id="openModalBtn" data-toggle="modal" data-target="#borrowModal" class="btn btn-primary">Borrow book</button>
+
+<div class="modal fade" id="borrowModal" tabindex="-1" role="dialog" aria-labelledby="borrowModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="borrowModal">Borrow Book</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="studentForm">
+                    <div class="form-group">
+                        <label for="studentId">Student</label>
+                        @Html.DropDownList("studentId", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="form-group">
+                        <label for="bookId">Book</label>
+                        @Html.DropDownList("bookId", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="form-group">
+                        <label for="takenDate">Taken Date</label>
+                        <input type="datetime" class="form-control" id="takenDate" name="takenDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="broughtDate">Brought Date</label>
+                        <input type="datetime" class="form-control" id="broughtDate" name="broughtDate">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="borrow">Borrow</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Edit Student Modal -->
+<div class="modal fade" id="editBorrowsModal" tabindex="-1" role="dialog" aria-labelledby="editBorrowsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editBorrowsModalLabel">Edit Borrows</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form to edit student data -->
+                <form id="editStudentForm">
+                    <input type="hidden" id="borrowId" name="borrowId" value="">
+                    <div class="form-group">
+                        <label for="studentname">Student Name:</label>
+                        <input type="text" class="form-control" id="studentname" name="studentname">
+                    </div>
+                    <div class="form-group">
+                        <label for="bookname">Book Name:</label>
+                        <input type="text" class="form-control" id="bookname" name="bookname">
+                    </div>
+                    <div class="form-group">
+                        <label for="takenDate">taken sDate:</label>
+                        <input type="datetime" class="form-control" id="takenDate" name="takenDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="broughtDate">brought Date:</label>
+                        <input type="datetime" class="form-control" id="broughtDate" name="broughtDate">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveChangesBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="deleteBorrowModal" tabindex="-1" role="dialog" aria-labelledby="deleteBorrowModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteBorrowModalLabel">Delete Author</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this Borrow?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2>Borrows</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            takenDate
+        </th>
+        <th>
+            broughtDate
+        </th>
+        <th>
+            book name
+        </th>
+        <th>
+            student name
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var borrow in Model)
+    {
+        <tr>
+            <td>
+                @borrow.takenDate
+            </td>
+            <td>
+                @borrow.broughtDate
+            </td>
+            <td>
+                @borrow.book.name
+            </td>
+            <td>
+                @borrow.student.name
+            </td>
+            <td>
+                <button class="edit-btn btn btn-warning" data-author-id="@borrow.borrowId">Edit</button>|
+                <button class="delete-btn btn btn-danger" data-author-id="@borrow.borrowId">Delete Borrow</button>
+            </td>
+        </tr>
+    }
+</table>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#borrow").on("click", function () {
+            var Students = {
+                name: $("#studentId").val(),
+                surname: $("#bookId").val(),
+                birthdate: $("#takenDate").val(),
+                gender: $("#broughtDate").val()
+            };
+
+            $.ajax({
+                url: "/Home/Borrow",
+                type: "POST",
+                data: Students,
+                success: function (result) {
+                    if (result.success) {
+                        $("#borrowModal").modal("hide");
+                    } else {
+
+                    }
+                }
+            });
+        });
+    });
+    $(".edit-btn").click(function () {
+        let Id = $(this).data("borrowId");
+            $.ajax({
+                url: '@Url.Action("Maintain", "Home")',
+                type: 'GET',
+                data: { id: Id },
+                success: function (borrow) {
+                    $("#borrowId").val(borrow.borrowId);
+                    $("#takenDate").val(borrow.takenDate);
+                    $("#broughtDate").val(borrow.broughtDate);
+                    $("#bookname").val(borrow.book.name);
+                    $("#studentname").val(borrow.student.name);
+                    $("#editBorrowsModal").modal('show');
+                }
+            });
+        });
+
+        $("#saveChangesBtn").click(function () {
+            let borrowedId = $("#borrowId").val();
+            let takenDate = $("#takenDate").val();
+            let broughtDate = $("#broughtDate").val();
+            let bookname = $("#takenDate").val();
+            let studentname = $("#studentname").val();
+
+            $.ajax({
+                url: '@Url.Action("UpdateBorrows", "Home")',
+                type: 'POST',
+                data: {
+                    borrowId: borrowedId,
+                    takenDate: takenDate,
+                    broughtDate: broughtDate,
+                    bookId: bookname,
+                    studentId: studentname
+                },
+                success: function (response) {
+                    console.log("Data updated successfully");
+                    $("#editBorrowsModal").modal('hide');
+                }
+            });
+            let borrowsId;
+            $(".delete-btn").click(function () {
+                borrowsId = $(this).data("borrow-id");
+                $("#deleteBorrowModal").modal('show');
+            });
+            $("#confirmDeleteBtn").click(function () {
+
+                $.ajax({
+                    url: '/Home/DeleteBorrow',
+                    type: 'POST',
+                    data: { id: borrowsId },
+                    success: function (response) {
+                        console.log("Borrow deleted successfully");
+                        $("#deleteBorrowModal").modal('hide');
+                    }
+                });
+            });
+        });
+
+</script>
+
